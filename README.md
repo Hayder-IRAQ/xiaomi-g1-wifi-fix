@@ -57,6 +57,9 @@ CP2102 USB to TTL UART STC Cable
 ```
 
 ---
+![photo_1_2026-03-31_04-39-41](https://github.com/user-attachments/assets/617ec2bd-e227-4f25-9de4-dd2d3ba543a3)
+![photo_2_2026-03-31_04-39-41](https://github.com/user-attachments/assets/7431dc37-f086-43b3-a2d2-5831000f7439)
+![photo_3_2026-03-31_04-39-41](https://github.com/user-attachments/assets/5d339bad-2e74-46e5-9b34-9ffd74c63fe1)
 
 ## 📌 WIFIPCB Pinout
 
