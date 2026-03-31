@@ -16,6 +16,7 @@
 - [Step by Step Fix](#step-by-step-fix)
 - [Verify Connection](#verify-connection)
 - [Local Control Without Mi Home](#local-control-without-mi-home)
+- [Firmware Backup](#firmware-backup)
 
 ---
 
@@ -57,6 +58,7 @@ CP2102 USB to TTL UART STC Cable
 ```
 
 ---
+
 ![photo_1_2026-03-31_04-39-41](https://github.com/user-attachments/assets/617ec2bd-e227-4f25-9de4-dd2d3ba543a3)
 ![photo_2_2026-03-31_04-39-41](https://github.com/user-attachments/assets/7431dc37-f086-43b3-a2d2-5831000f7439)
 ![photo_3_2026-03-31_04-39-41](https://github.com/user-attachments/assets/5d339bad-2e74-46e5-9b34-9ffd74c63fe1)
@@ -290,12 +292,61 @@ vac.set_property_by(2, 6, 2)
 
 ---
 
+## 💾 Firmware Backup (backup_clean.bin)
+
+A cleaned firmware backup for the **MJSTG1 (mijia.vacuum.v2)** is included in this repository.
+
+### ✅ What this file CONTAINS:
+- Original ESP32 firmware from R1_WIFIPCB V1.1
+- miIO communication stack
+- Original Xiaomi vacuum firmware code
+- Boot loader and partition table
+- All original system files intact
+
+### ❌ What this file does NOT contain:
+- WiFi SSID or password (wiped at offset 0x9000)
+- Device token (wiped at offset 0x1F000)
+- Any personal account information
+- MAC address binding data
+- Cloud server credentials
+
+### How to use the backup:
+
+**Restore original firmware:**
+```bash
+py -m esptool --port COM4 --baud 115200 write-flash 0x0 backup_clean.bin
+```
+
+> ⚠️ After restoring, you must re-flash your WiFi credentials using Step 4 and Step 5 above, since the backup has empty WiFi fields.
+
+### How to clean your own backup before sharing:
+
+```python
+# clean_backup.py
+with open('backup.bin', 'rb') as f:
+    data = bytearray(f.read())
+
+# Wipe WiFi credentials (NVS partition)
+data[0x9000:0x9000+4096] = bytearray(4096)
+
+# Wipe token area
+data[0x1F000:0x1F000+256] = bytearray(256)
+
+with open('backup_clean.bin', 'wb') as f:
+    f.write(data)
+
+print('Safe to share!')
+```
+
+---
+
 ## ⚠️ Important Notes
 
 - WiFi must be **2.4GHz** — 5GHz is not supported
 - SSID must use **English characters only** — no spaces or special chars
 - Always backup firmware before flashing
 - The token is required for local control — extract it while connected to Mi Home at least once
+- Never share your original `backup.bin` — it contains personal credentials
 
 ---
 
